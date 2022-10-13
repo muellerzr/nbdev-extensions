@@ -79,7 +79,7 @@ class NoteExportProc(Processor):
                 self._idx = cell.idx_
             else:
                 self.end_link = True
-        elif cell.cell_type == "markdown" and "explain" in cell.directives:
+        elif cell.cell_type == "markdown" and "explain" in cell.directives_:
             found_explanation = True
             if self._idx is not None:
                 self.explanations.append(cell)       
