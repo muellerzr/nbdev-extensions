@@ -8,6 +8,7 @@ from nbdev.config import get_config
 from nbdev.process import NBProcessor
 from nbdev.processors import Processor, mk_cell
 from nbdev.export import nb_export
+from nbdev.sync import write_nb
 
 from fastcore.script import call_parse
 from fastcore.xtras import Path
