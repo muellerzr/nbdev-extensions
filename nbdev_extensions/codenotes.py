@@ -8,6 +8,7 @@ from nbdev.config import get_config
 from nbdev.process import NBProcessor
 from nbdev.processors import Processor, mk_cell
 from nbdev.export import nb_export
+from nbdev.doclinks import nbglob
 from nbdev.sync import write_nb
 
 from fastcore.script import call_parse
@@ -70,18 +71,21 @@ class NoteExportProc(Processor):
         self.results = make_panel_tabset()
         self._idx = None
         self.found_explanation = False
+        self.end_link = True
     
     def cell(self, cell):
         if cell.cell_type == "code":
             if not self.found_explanation:
                 self._code = cell
                 self._idx = cell.idx_
+            if cell != self._code:
+                self.end_link
         elif cell.cell_type == "markdown" and "explain" in cell.directives_:
             self.found_explanation = True
             if self._idx is not None:
                 self.explanations.append(cell)       
         
-        if self.end_link and self.found_explanation:
+        if self.found_explanation and self.end_link:
             # Assume we have all code + explainations
             _idx = 1
             self.results.insert(_idx, self._code)
@@ -95,8 +99,9 @@ class NoteExportProc(Processor):
                 _idx += 1
                 self.nb.cells.remove(explanation)
             self.nb.cells = self.nb.cells[:self._idx] + self.results + self.nb.cells[self._idx:]
-            self._idx = None
             self.found_explanation = False
+            self._code = cell
+            self._idx = cell._idx
 
 # %% ../nbs/01_codenotes.ipynb 9
 @call_parse
