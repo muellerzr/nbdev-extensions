@@ -101,7 +101,7 @@ class NoteExportProc(Processor):
             self.nb.cells = self.nb.cells[:self._idx] + self.results + self.nb.cells[self._idx:]
             self.found_explanation = False
             self._code = cell
-            self._idx = cell._idx
+            self._idx = cell.idx_
 
 # %% ../nbs/01_codenotes.ipynb 9
 @call_parse
