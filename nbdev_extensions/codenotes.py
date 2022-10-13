@@ -71,6 +71,7 @@ class NoteExportProc(Processor):
         self._idx = None
     
     def cell(self, cell):
+        found_explanation = False
         if cell.cell_type == "code":
             if self._idx is None:
                 self._code = cell
@@ -78,11 +79,12 @@ class NoteExportProc(Processor):
                 self._idx = cell.idx_
             else:
                 self.end_link = True
-        elif cell.cell_type == "markdown":
+        elif cell.cell_type == "markdown" and "explain" in cell.directives:
+            found_explanation = True
             if self._idx is not None:
                 self.explanations.append(cell)       
         
-        if self.end_link:
+        if self.end_link and found_explanation:
             # Assume we have all code + explainations
             _idx = 1
             self.results.insert(_idx, self._code)
