@@ -14,7 +14,7 @@ jobs:
            python-version: 3.7
        
        - name: Install nbdev-extensions
-         run: pip install nbdev_extensions
+         run: pip install git+https://github.com/muellerzr/nbdev-extensions
        
        - name: Export notebooks
          run: parse_notes
