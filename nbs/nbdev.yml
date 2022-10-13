@@ -1,0 +1,9 @@
+project:
+  output-dir: _docs
+
+website:
+  title: "nbdev_extensions"
+  site-url: "https://muellerzr.github.io/nbdev_extensions/"
+  description: "Cool nbdev extensions I've thought of"
+  repo-branch: main
+  repo-url: "https://github.com/muellerzr/nbdev-extensions/"

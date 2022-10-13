@@ -107,6 +107,7 @@ class NoteExportProc(Processor):
 def parse_notes():
     "Exports notebooks to parsed notes for documentation. Should be called in the workflow, not yourself!"
     for nb in Path(get_config().nbs_path).ls():
-        processor = NBProcessor(nb, [NoteExportProc])
-        processor.process()
-        write_nb(processor.nb, nb)
+        if nb.is_file():
+            processor = NBProcessor(nb, [NoteExportProc])
+            processor.process()
+            write_nb(processor.nb, nb)
