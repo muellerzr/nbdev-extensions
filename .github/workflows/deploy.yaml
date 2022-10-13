@@ -32,13 +32,15 @@ runs:
           pip install -Uq nbdev
         fi
         test -f setup.py && pip install -e ".[dev]"
-        nbdev_docs
         
     - name: Install nbdev-extensions
       run: pip install git+https://github.com/muellerzr/nbdev-extensions
        
     - name: Export notes
       run: parse_notes
+    
+    - name: Export docs
+      run:  nbdev_docs
 
     - name: Enable GitHub Pages
       shell: python
