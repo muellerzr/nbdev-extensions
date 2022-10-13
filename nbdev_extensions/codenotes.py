@@ -67,25 +67,21 @@ class NoteExportProc(Processor):
     def begin(self):
         self.explanations = []
         self._code = None
-        self.end_link = False
         self.results = make_panel_tabset()
         self._idx = None
+        self.found_explanation = False
     
     def cell(self, cell):
-        found_explanation = False
         if cell.cell_type == "code":
-            if self._idx is None:
+            if not self.found_explanation:
                 self._code = cell
-                self.end_link = False
                 self._idx = cell.idx_
-            else:
-                self.end_link = True
         elif cell.cell_type == "markdown" and "explain" in cell.directives_:
-            found_explanation = True
+            self.found_explanation = True
             if self._idx is not None:
                 self.explanations.append(cell)       
         
-        if self.end_link and found_explanation:
+        if self.end_link and self.found_explanation:
             # Assume we have all code + explainations
             _idx = 1
             self.results.insert(_idx, self._code)
@@ -100,7 +96,7 @@ class NoteExportProc(Processor):
                 self.nb.cells.remove(explanation)
             self.nb.cells = self.nb.cells[:self._idx] + self.results + self.nb.cells[self._idx:]
             self._idx = None
-            self.end_link = False
+            self.found_explanation = False
 
 # %% ../nbs/01_codenotes.ipynb 9
 @call_parse
