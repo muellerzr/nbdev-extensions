@@ -5,7 +5,7 @@ __all__ = ['make_panel_tabset', 'convert_explanation', 'extract_code', 'parse_co
 
 # %% ../nbs/01_codenotes.ipynb 3
 from nbdev.config import get_config
-from nbdev.process import NBProcessor
+from nbdev.process import NBProcessor, extract_directives
 from nbdev.processors import Processor, mk_cell
 from nbdev.export import nb_export
 from nbdev.doclinks import nbglob
@@ -15,6 +15,7 @@ from fastcore.script import call_parse
 from fastcore.xtras import Path
 
 import shlex
+import re
 
 # %% ../nbs/01_codenotes.ipynb 4
 def make_panel_tabset():
@@ -32,8 +33,9 @@ def make_panel_tabset():
 def convert_explanation(explanation_cell, source):
     "Takes an explanation and source code and linkes them together in a new cell"
     _py, newline = "{.python}", "\n"
+    explanation = re.sub(r'\*#|.*[\n]', "", explanation_cell.source)
     content = f"```{_py}{newline}{source}{newline}```"
-    content += f"{newline}{explanation_cell.source}"
+    content += f"{newline}{explanation}"
     return mk_cell(content, cell_type="markdown")
 
 # %% ../nbs/01_codenotes.ipynb 6
@@ -98,15 +100,12 @@ class NoteExportProc(Processor):
                 self.results.insert(_idx, convert_explanation(explanation, source))
                 _idx += 1
                 self.nb.cells.remove(explanation)
+                
             self.nb.cells = self.nb.cells[:self._idx] + self.results + self.nb.cells[self._idx:]
             self.found_explanation = False
             self._code = cell
             self._idx = cell.idx_
-            
-    def end(self):
-        for cell in self.nb.cells:
-            if "explain" in cell.directives_:
-                cell.directives_ = []
+            self.explanations = []
 
 # %% ../nbs/01_codenotes.ipynb 9
 @call_parse
