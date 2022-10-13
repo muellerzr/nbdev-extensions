@@ -102,12 +102,17 @@ class NoteExportProc(Processor):
             self.found_explanation = False
             self._code = cell
             self._idx = cell.idx_
+            
+    def end(self):
+        for cell in self.nb.cells:
+            if "explain" in cell.directives_:
+                cell.directives_ = []
 
 # %% ../nbs/01_codenotes.ipynb 9
 @call_parse
 def parse_notes():
     "Exports notebooks to parsed notes for documentation. Should be called in the workflow, not yourself!"
     for nb in nbglob(get_config().nbs_path):
-        processor = NBProcessor(nb, [NoteExportProc])
+        processor = NBProcessor(nb, [NoteExportProc], rm_directives=False)
         processor.process()
         write_nb(processor.nb, nb)
