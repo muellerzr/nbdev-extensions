@@ -23,7 +23,7 @@ def make_panel_tabset():
     cells = [
         mk_cell("::: {.panel-tabset}\n\n## Code", cell_type="markdown"),
         # Original goes here
-        mk_cell("## Code + Explaination", cell_type="markdown"),
+        mk_cell("## Code + Explanation", cell_type="markdown"),
         # All explainations go here
         mk_cell(":::", cell_type="markdown")
     ]
