@@ -22,4 +22,10 @@ d = { 'settings': { 'branch': 'main',
                                             'nbdev_extensions.codenotes.parse_notes': ( 'codenotes.html#parse_notes',
                                                                                         'nbdev_extensions/codenotes.py')},
             'nbdev_extensions.mknb': { 'nbdev_extensions.mknb._mk_nb': ('mknb.html#_mk_nb', 'nbdev_extensions/mknb.py'),
-                                       'nbdev_extensions.mknb.new_nb': ('mknb.html#new_nb', 'nbdev_extensions/mknb.py')}}}
+                                       'nbdev_extensions.mknb.new_nb': ('mknb.html#new_nb', 'nbdev_extensions/mknb.py')},
+            'nbdev_extensions.tagmaker': { 'nbdev_extensions.tagmaker.LayoutProc': ( 'tagmaker.html#layoutproc',
+                                                                                     'nbdev_extensions/tagmaker.py'),
+                                           'nbdev_extensions.tagmaker.LayoutProc.cell': ( 'tagmaker.html#layoutproc.cell',
+                                                                                          'nbdev_extensions/tagmaker.py'),
+                                           'nbdev_extensions.tagmaker.convert_layout': ( 'tagmaker.html#convert_layout',
+                                                                                         'nbdev_extensions/tagmaker.py')}}}
