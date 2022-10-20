@@ -73,7 +73,7 @@ class NoteExportProc(Processor):
         self.results = make_panel_tabset()
         self._idx = None
         self.found_explanation = False
-        self.end_link = True
+        self.end_link = False
     
     def cell(self, cell):
         if cell.cell_type == "code":
@@ -81,7 +81,7 @@ class NoteExportProc(Processor):
                 self._code = cell
                 self._idx = cell.idx_
             if cell != self._code:
-                self.end_link
+                self.end_link = True
         elif cell.cell_type == "markdown" and "explain" in cell.directives_:
             self.found_explanation = True
             if self._idx is not None:

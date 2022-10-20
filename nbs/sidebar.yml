@@ -4,4 +4,4 @@ website:
       - index.ipynb
       - 00_mknb.ipynb
       - 01_codenotes.ipynb
-      - 02_test.ipynb
+      - 02_tagmaker.ipynb
