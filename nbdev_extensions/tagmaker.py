@@ -39,7 +39,7 @@ class LayoutProc(Processor):
         if cell.cell_type == "markdown" and "layout" in cell.directives_:
             directives_ = cell.directives_["layout"]
             if self.has_partial and "end" in directives_:
-                    cell.source = ":::"
+                    cell.source += ":::"
                     self.has_partial = False
             else:
                 convert_layout(cell, directives_[0])
