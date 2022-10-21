@@ -22,10 +22,9 @@ _LAYOUT_STR = Template("::: {$layout}\n$content\n")
 # %% ../nbs/02_tagmaker.ipynb 6
 def convert_layout(cell, layout):
     "Parses cell formatted with ::: {$something}, and potentially :::"
-    layout_format = layout[0]
     content = cell.source
     cell.source = _LAYOUT_STR.substitute(
-        layout=layout,
+        layout=" ".join(layout),
         content=content
     )
 
@@ -39,11 +38,14 @@ class LayoutProc(Processor):
         if cell.cell_type == "markdown" and "layout" in cell.directives_:
             directives_ = cell.directives_["layout"]
             if self.has_partial and "end" in directives_:
-                    cell.source += ":::"
+                    cell.source += "\n:::"
+                    directives_.remove("end")
                     self.has_partial = False
             else:
-                convert_layout(cell, directives_[0])
                 if "start" in directives_:
                     self.has_partial = True
+                    directives_.remove("start")
+                    convert_layout(cell, directives_)
                 else:
+                    convert_layout(cell, directives_)
                     cell.source += ":::"

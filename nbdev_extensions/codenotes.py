@@ -67,47 +67,70 @@ def parse_code(code_cell, markdown_cell):
 # %% ../nbs/01_codenotes.ipynb 8
 class NoteExportProc(Processor):
     "A proc that checks and reorganizes cells for documentation for proper explainations"
+    offset = 0
+    steps = []
+    _i = 0
     def begin(self):
-        self.explanations = []
+        self.reset()
+        self.has_reset = False
+        self.iter = 0
+        self.offset = 0
+    
+    def reset(self):
+        self.results = make_panel_tabset()     
+        self.code = []
         self._code = None
-        self.results = make_panel_tabset()
-        self._idx = None
         self.found_explanation = False
         self.end_link = False
+        self.explanations = []
+        self.start_idx = None
+        self.end_idx = None
     
     def cell(self, cell):
         if cell.cell_type == "code":
             if not self.found_explanation:
                 self._code = cell
-                self._idx = cell.idx_
-            if cell != self._code:
-                self.end_link = True
-        elif cell.cell_type == "markdown" and "explain" in cell.directives_:
+                self.start_idx = cell.idx_
+                
+        if cell.cell_type == "markdown" and "explain" in cell.directives_:
             self.found_explanation = True
-            if self._idx is not None:
-                self.explanations.append(cell)       
+            self.explanations.append(cell)
+            
+        if self.found_explanation:
+            idx = cell.idx_ + 1
+            if (len(self.nb.cells) <= idx+1) or ("explain" not in self.nb.cells[idx].directives_):
+                self.end_link = True
+                self.end_idx = cell.idx_ + 1
         
         if self.found_explanation and self.end_link:
             # Assume we have all code + explainations
-            _idx = 1
-            self.results.insert(_idx, self._code)
-            _idx += 2
-            self.nb.cells.remove(self._code)
-            self.results.insert(_idx, self._code)
-            _idx += 1
-            for explanation in self.explanations:
+            tabset_code_idx = 1
+            tabset_explain_idx = 3
+            self.results.insert(tabset_code_idx, self._code)
+            explanations = []
+            for i,explanation in enumerate(self.explanations):
                 source = parse_code(self._code, explanation)
-                self.results.insert(_idx, convert_explanation(explanation, source))
-                _idx += 1
+                converted_explanation = convert_explanation(explanation, source)
+                explanations.append(converted_explanation)
                 self.nb.cells.remove(explanation)
-                
-            self.nb.cells = self.nb.cells[:self._idx] + self.results + self.nb.cells[self._idx:]
-            self.found_explanation = False
-            self._code = cell
-            self._idx = cell.idx_
-            self.explanations = []
+            self.results = self.results[:3] + explanations + [self.results[3]]
+            self.nb.cells.remove(self._code)
+            self.offset = 0
+            for result in self.results:
+                result.idx_ = self.nb.cells[self.start_idx - 1].idx_ + 1
+                # print(f'Front: {self.nb.cells[self.start_idx].source}\nInserting: {result.source}')
+                self.nb.cells.insert(self.start_idx + self.offset, result)
+                # print(self.nb.cells[self.start_idx + self.offset].source)
+                self.offset += 1
+            self.iter += 1
+            # self.nb_copy.cells[self.start_idx+1:self.end_idx] = self.results
+            self.reset()
+            self.has_reset = True
+            
+            self.offset = 0
+            for i,c in enumerate(self.nb.cells): c.idx_ = i
 
-# %% ../nbs/01_codenotes.ipynb 9
+# %% ../nbs/01_codenotes.ipynb 11
 @call_parse
 def parse_notes():
     "Exports notebooks to parsed notes for documentation. Should be called in the workflow, not yourself!"
