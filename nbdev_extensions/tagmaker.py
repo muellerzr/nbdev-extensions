@@ -37,13 +37,7 @@ def convert_shortcuts(cell):
         if directive in _shortcuts.keys():
             cell.directives_["layout"][i] = _shortcuts[directive]
 
-convert_shortcuts(cell)
-convert_layout(cell, cell.directives_["layout"][0])
-test_eq(cell.source, """::: {.column-margin}
-A test
-""")
-
-# %% ../nbs/02_tagmaker.ipynb 11
+# %% ../nbs/02_tagmaker.ipynb 12
 import re
 class LayoutProc(Processor):
     """A proc that will automatically change #| layout format
