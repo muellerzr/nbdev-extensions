@@ -18,17 +18,21 @@ from string import Template
 
 # %% ../nbs/02_tagmaker.ipynb 5
 _LAYOUT_STR = Template("::: {$layout}\n$content\n")
+_shortcuts = {
+    "margin": ".column-margin"
+}
 
 # %% ../nbs/02_tagmaker.ipynb 6
 def convert_layout(cell, layout):
     "Parses cell formatted with ::: {$something}, and potentially :::"
     content = cell.source
     cell.source = _LAYOUT_STR.substitute(
-        layout=" ".join(layout),
+        layout="".join(layout),
         content=content
     )
 
-# %% ../nbs/02_tagmaker.ipynb 9
+# %% ../nbs/02_tagmaker.ipynb 11
+import re
 class LayoutProc(Processor):
     """A proc that will automatically change #| layout format
     to ::: {format} ... :::
@@ -36,10 +40,12 @@ class LayoutProc(Processor):
     has_partial = False
     def cell(self, cell):
         if cell.cell_type == "markdown" and "layout" in cell.directives_:
+            convert_shortcuts(cell)
             directives_ = cell.directives_["layout"]
             if self.has_partial and "end" in directives_:
-                    cell.source += "\n:::"
-                    directives_.remove("end")
+                    cell.source += ":::"
+                    cell.source = re.sub(r'#\|\slayout\send', '', cell.source)
+                    # directives_.remove("end")
                     self.has_partial = False
             else:
                 if "start" in directives_:
