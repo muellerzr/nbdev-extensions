@@ -30,4 +30,6 @@ d = { 'settings': { 'branch': 'main',
                                            'nbdev_extensions.tagmaker.LayoutProc.cell': ( 'tagmaker.html#layoutproc.cell',
                                                                                           'nbdev_extensions/tagmaker.py'),
                                            'nbdev_extensions.tagmaker.convert_layout': ( 'tagmaker.html#convert_layout',
-                                                                                         'nbdev_extensions/tagmaker.py')}}}
+                                                                                         'nbdev_extensions/tagmaker.py'),
+                                           'nbdev_extensions.tagmaker.convert_shortcuts': ( 'tagmaker.html#convert_shortcuts',
+                                                                                            'nbdev_extensions/tagmaker.py')}}}
