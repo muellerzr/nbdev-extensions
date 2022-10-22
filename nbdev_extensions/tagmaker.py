@@ -30,6 +30,8 @@ def convert_layout(cell, layout):
         layout="".join(layout),
         content=content
     )
+    if "end" in cell.source.splitlines(True)[0]:
+        cell.source = ":::"
 
 # %% ../nbs/02_tagmaker.ipynb 10
 def convert_shortcuts(cell):
@@ -54,7 +56,7 @@ class LayoutProc(Processor):
                     # directives_.remove("end")
                     self.has_partial = False
             else:
-                if "start" in directives_:
+                if directives_[-1] == "start":
                     self.has_partial = True
                     directives_.remove("start")
                     convert_layout(cell, directives_)
