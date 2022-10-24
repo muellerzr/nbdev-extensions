@@ -11,6 +11,7 @@ from nbdev.export import nb_export
 from nbdev.doclinks import nbglob
 from nbdev.sync import write_nb
 
+from fastcore.basics import listify
 from fastcore.script import call_parse
 from fastcore.xtras import Path
 
@@ -23,15 +24,23 @@ _shortcuts = {
 }
 
 # %% ../nbs/02_tagmaker.ipynb 6
-def convert_layout(cell, layout):
+def convert_layout(cell, layout, start=False):
     "Parses cell formatted with ::: {$something}, and potentially :::"
+    layout = listify(layout)
     content = cell.source
-    cell.source = _LAYOUT_STR.substitute(
-        layout="".join(layout),
-        content=content
-    )
-    if "end" in cell.source.splitlines(True)[0]:
-        cell.source = ":::"
+    code = cell.source.splitlines(True)
+    if "end" in code[0]:
+        if len(code) == 1:
+            cell.source = ":::"
+        else:
+            cell.source += ":::"
+    else:
+        cell.source = _LAYOUT_STR.substitute(
+            layout=" ".join(layout),
+            content=content
+        )
+        if not start:
+            cell.source += ":::"
 
 # %% ../nbs/02_tagmaker.ipynb 10
 def convert_shortcuts(cell):
@@ -51,15 +60,13 @@ class LayoutProc(Processor):
             convert_shortcuts(cell)
             directives_ = cell.directives_["layout"]
             if self.has_partial and "end" in directives_:
-                    cell.source += ":::"
-                    cell.source = re.sub(r'#\|\slayout\send', '', cell.source)
-                    # directives_.remove("end")
-                    self.has_partial = False
+                convert_layout(cell, directives_)
+                self.has_partial = False
             else:
                 if directives_[-1] == "start":
                     self.has_partial = True
                     directives_.remove("start")
-                    convert_layout(cell, directives_)
+                    convert_layout(cell, directives_, True)
                 else:
                     convert_layout(cell, directives_)
                     cell.source += ":::"
