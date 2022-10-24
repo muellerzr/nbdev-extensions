@@ -107,7 +107,7 @@ class NoteExportProc(Processor):
             tabset_code_idx = 1
             tabset_explain_idx = 3
             self.results.insert(tabset_code_idx, self._code)
-            explanations = []
+            explanations = [self._code]
             for i,explanation in enumerate(self.explanations):
                 source = parse_code(self._code, explanation)
                 converted_explanation = convert_explanation(explanation, source)
