@@ -1,3 +1,3 @@
-__version__ = "0.0.4"
+__version__ = "0.1.0"
 
 from .mknb import new_nb

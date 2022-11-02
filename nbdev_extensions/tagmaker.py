@@ -69,4 +69,3 @@ class LayoutProc(Processor):
                     convert_layout(cell, directives_, True)
                 else:
                     convert_layout(cell, directives_)
-                    cell.source += ":::"

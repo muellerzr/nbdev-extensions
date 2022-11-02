@@ -130,7 +130,7 @@ class NoteExportProc(Processor):
             self.offset = 0
             for i,c in enumerate(self.nb.cells): c.idx_ = i
 
-# %% ../nbs/01_codenotes.ipynb 11
+# %% ../nbs/01_codenotes.ipynb 9
 @call_parse
 def parse_notes():
     "Exports notebooks to parsed notes for documentation. Should be called in the workflow, not yourself!"
