@@ -44,21 +44,21 @@ def convert_layout(cell, layout, start=False):
 
 # %% ../nbs/02_tagmaker.ipynb 10
 def convert_shortcuts(cell):
-    for i,directive in enumerate(cell.directives_["layout"]):
+    for i,directive in enumerate(cell.directives_["div"]):
         if directive in _shortcuts.keys():
-            cell.directives_["layout"][i] = _shortcuts[directive]
+            cell.directives_["div"][i] = _shortcuts[directive]
 
 # %% ../nbs/02_tagmaker.ipynb 12
 import re
 class LayoutProc(Processor):
-    """A proc that will automatically change #| layout format
+    """A proc that will automatically change #| css format
     to ::: {format} ... :::
     """
     has_partial = False
     def cell(self, cell):
-        if cell.cell_type == "markdown" and "layout" in cell.directives_:
+        if cell.cell_type == "markdown" and "div" in cell.directives_:
             convert_shortcuts(cell)
-            directives_ = cell.directives_["layout"]
+            directives_ = cell.directives_["div"]
             if self.has_partial and "end" in directives_:
                 convert_layout(cell, directives_)
                 self.has_partial = False
