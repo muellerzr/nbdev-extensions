@@ -34,7 +34,7 @@ def convert_explanation(explanation_cell, source):
     "Takes an explanation and source code and linkes them together in a new cell"
     _py, newline = "{.python}", "\n"
     explanation = re.sub(r'\*#|.*[\n]', "", explanation_cell.source)
-    content = f"```{_py}{newline}{source}{newline}```"
+    content = f"{newline}***{newline}```{_py}{newline}{source}{newline}```"
     content += f"{newline}::: "
     content += "{style='padding-top: 0px;'}"
     content += f"{newline}{explanation}{newline}:::"
