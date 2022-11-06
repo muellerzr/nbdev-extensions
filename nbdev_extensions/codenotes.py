@@ -35,7 +35,9 @@ def convert_explanation(explanation_cell, source):
     _py, newline = "{.python}", "\n"
     explanation = re.sub(r'\*#|.*[\n]', "", explanation_cell.source)
     content = f"```{_py}{newline}{source}{newline}```"
-    content += f"{newline}{explanation}"
+    content += f"{newline}::: "
+    content += "{style='padding-top: 0px;'}"
+    content += f"{newline}{explanation}{newline}:::"
     return mk_cell(content, cell_type="markdown")
 
 # %% ../nbs/01_codenotes.ipynb 6
