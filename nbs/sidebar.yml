@@ -5,3 +5,6 @@ website:
       - 00_mknb.ipynb
       - 01_codenotes.ipynb
       - 02_tagmaker.ipynb
+      - 03_codetips.ipynb
+      - result.ipynb
+      - test.ipynb

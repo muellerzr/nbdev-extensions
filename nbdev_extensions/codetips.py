@@ -79,25 +79,25 @@ def write_tooltip_directives(
         tooltip += f'\n#| filename: "{filename}"'
     return tooltip + "\n"
 
-# %% ../nbs/03_codetips.ipynb 11
+# %% ../nbs/03_codetips.ipynb 9
 def convert_explanation(explanation_cell, source):
     "Takes an explanation and source code and linkes them together in a new cell"
-    filename = explanation_cell.directives_.pop("filename", None)
+    filename = explanation_cell.directives_.pop("filename:", [None])[0]
     explanation = re.sub(r'\*#|.*[\n]', "", explanation_cell.source)
     content = write_tooltip_directives(explanation, filename=filename)
     content += source
     return mk_cell(content, cell_type="code")
 
-# %% ../nbs/03_codetips.ipynb 12
+# %% ../nbs/03_codetips.ipynb 10
 def extract_code(start_code, end_code, source, instance_num, end_instance_num=0):
     "Finds code between start and finish potentially with instances to check"
     start_match = list(re.finditer(f'[ \t]*{start_code}', source))[int(instance_num)]
     start_char = start_match.span()[0]
     end_match = list(re.finditer(f'[ \t]*{end_code}', source))[int(end_instance_num)]
     end_char = end_match.span()[1]
-    return source[start_char:end_char]
+    return source[start_char:end_char], start_char, end_char
 
-# %% ../nbs/03_codetips.ipynb 13
+# %% ../nbs/03_codetips.ipynb 11
 def parse_code(code_cell, markdown_cell):
     "Parses directives to extract the code needed to be highlighted"
     directives = markdown_cell.directives_["tip"]
@@ -109,7 +109,7 @@ def parse_code(code_cell, markdown_cell):
     start_code, end_code = re.escape(start_code), re.escape(end_code)
     return extract_code(start_code, end_code, code_cell.source, start_instance_num, end_instance_num)
 
-# %% ../nbs/03_codetips.ipynb 14
+# %% ../nbs/03_codetips.ipynb 12
 class TipExportProc(Processor):
     "A proc that checks and reorganizes cells for documentation for proper explainations"
     offset = 0
@@ -130,6 +130,7 @@ class TipExportProc(Processor):
         self.explanations = []
         self.start_idx = None
         self.end_idx = None
+        self.indexes = []
     
     def cell(self, cell):
         if cell.cell_type == "code":
@@ -151,10 +152,24 @@ class TipExportProc(Processor):
             # Assume we have all code + explainations
             explanations = [self._code]
             for i,explanation in enumerate(self.explanations):
-                source = parse_code(self._code, explanation)
+                source, start, end = parse_code(self._code, explanation)
+                self.indexes += [(start,end)]
                 converted_explanation = convert_explanation(explanation, source)
                 self.results.append(converted_explanation)
                 self.nb.cells.remove(explanation)
+            second_idxs = list(self.indexes)
+            second_idxs.sort()
+            offset = 0
+            for idx, rng in enumerate(second_idxs):
+                if rng != second_idxs[-1]:
+                    if second_idxs[idx+1][0] - rng[-1] != 1:
+                        start = rng[-1]
+                        end = second_idxs[idx+1][0]
+                        new_src = self._code.source[start:end]
+                        if new_src != '':
+                            new_src = f'#| classes: .nogap\n{new_src}'
+                            self.results.insert(self.indexes.index(rng)+2, mk_cell(new_src, cell_type="code"))
+                            offset += 1
             self.results.append(mk_cell(":::", cell_type="markdown"))
             self.nb.cells.remove(self._code)
             self.offset = 0
@@ -169,7 +184,7 @@ class TipExportProc(Processor):
             self.offset = 0
             for i,c in enumerate(self.nb.cells): c.idx_ = i
 
-# %% ../nbs/03_codetips.ipynb 15
+# %% ../nbs/03_codetips.ipynb 13
 @call_parse
 def parse_notes():
     "Exports notebooks to parsed notes for documentation. Should be called in the workflow, not yourself!"
