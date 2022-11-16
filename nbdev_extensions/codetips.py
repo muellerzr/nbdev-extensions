@@ -74,7 +74,8 @@ def write_tooltip_directives(
     hint_directives = [f".hint--{hint} " for hint in hint_directives]
     hint_directives[-1] = hint_directives[-1].rstrip() # for formatting
     tooltip = f'''#| classes: .nogap {"".join(hint_directives)}
-#| aria-label: "{explanation}"'''
+#| aria-label: "{explanation}"
+#|eval: false'''
     if filename is not None:
         tooltip += f'\n#| filename: "{filename}"'
     return tooltip + "\n"
@@ -167,7 +168,7 @@ class TipExportProc(Processor):
                         end = second_idxs[idx+1][0]
                         new_src = self._code.source[start:end]
                         if new_src != '':
-                            new_src = f'#| classes: .nogap\n{new_src}'
+                            new_src = f'#| classes: .nogap\n#|eval: false\n{new_src}'
                             self.results.insert(self.indexes.index(rng)+2, mk_cell(new_src, cell_type="code"))
                             offset += 1
             self.results.append(mk_cell(":::", cell_type="markdown"))
