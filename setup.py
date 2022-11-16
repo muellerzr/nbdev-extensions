@@ -42,7 +42,9 @@ setuptools.setup(
     packages = setuptools.find_packages(),
     include_package_data = True,
     install_requires = [
-        "git+https://github.com/muellerzr/nbdev-extensions#egg=nbdev_extensions"
+        "nbdev>=2.0.0,<3",
+        "requests",
+        "nbdev_extensions @ git+https://github.com/muellerzr/nbdev-extensions"
     ],
     extras_require={ 'dev': dev_requirements },
     dependency_links = cfg.get('dep_links','').split(),
