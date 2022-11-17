@@ -18,12 +18,12 @@ pip install nbdev-extensions
 
 `nbdev-extensions` currently has the following features:
 
-- [`new_nb`](https://muellerzr.github.io/nbdev_extensions/mknb.html#new_nb) -
+- [`new_nb`](https://muellerzr.github.io/nbdev-extensions/mknb.html#new_nb) -
   A CLI/functional interface to quickly generate blank template
   notebooks for nbdev development with all of the necessary boilerplate
   cells prefilled based on the passed parameters.
 
-- [Code Notes](/codenotes) - A note-taking annotation tool utilizing
+- [Code Notes](https://muellerzr.github.io/nbdev-extensions/codenotes.html) - A note-taking annotation tool utilizing
   nbdev to write quick comments and explanations for sections of code in
   a code cell without cluttering the code cell with comments. These show
   up as panels in the rendered documentation, one with just the source
