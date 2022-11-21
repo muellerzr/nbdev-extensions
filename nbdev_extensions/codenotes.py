@@ -120,12 +120,9 @@ class NoteExportProc(Processor):
             self.offset = 0
             for result in self.results:
                 result.idx_ = self.nb.cells[self.start_idx - 1].idx_ + 1
-                # print(f'Front: {self.nb.cells[self.start_idx].source}\nInserting: {result.source}')
                 self.nb.cells.insert(self.start_idx + self.offset, result)
-                # print(self.nb.cells[self.start_idx + self.offset].source)
                 self.offset += 1
             self.iter += 1
-            # self.nb_copy.cells[self.start_idx+1:self.end_idx] = self.results
             self.reset()
             self.has_reset = True
             
