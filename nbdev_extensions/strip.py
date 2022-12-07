@@ -27,6 +27,7 @@ def strip_nbs(
         cells = []
         for cell in nb["cells"]:
             if cell["cell_type"] == "code":
+                cell.source = ''.join([line.split(" #")[0] for line in cell.source])
                 cells.append(cell)
         new_nb = AttrDict(
             cells=cells,
