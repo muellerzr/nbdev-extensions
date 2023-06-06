@@ -1,0 +1,72 @@
+[
+  {
+    "objectID": "mknb.html",
+    "href": "mknb.html",
+    "title": "mknb",
+    "section": "",
+    "text": "source\n\nnew_nb\n\n new_nb (name:str, module:str=None, title:str=None, description:str=None,\n         nprefix:int=None, nsuffix:int=None)\n\nCreates a new base nbdev notebook named {nprefix}{nsuffix}_{name}.ipynb\n\n\n\n\n\n\n\n\n\n\nType\nDefault\nDetails\n\n\n\n\nname\nstr\n\nThe name of the newly created notebook\n\n\nmodule\nstr\nNone\nThe name of the exported module it will generate\n\n\ntitle\nstr\nNone\nThe title header in the notebook\n\n\ndescription\nstr\nNone\nThe description that will go under the title header\n\n\nnprefix\nint\nNone\nif &gt; 0, will be the first number in the filename\n\n\nnsuffix\nint\nNone\nIf &gt; 0, will be the second number in the filename\n\n\n\nWith new_nb, you can very quickly create base template notebooks inside your nbdev repo that are prepared for writing. It will automatically iterate the filename based on the last digit used, and you can name the modules and exports to your need. Now adding a new nbdev module is as simple as a CLI command, and you don’t have to worry about writing out all the tedious boilerplate to make it all operate."
+  },
+  {
+    "objectID": "tagmaker.html",
+    "href": "tagmaker.html",
+    "title": "Tag Maker",
+    "section": "",
+    "text": "As I was writing my new course, I found that having to do two sets of ::: and something to put in between two {} annoying, so this is a quick processor to do that for me as a tag\n\nsource\n\n\n\n convert_layout (cell, layout, start=False)\n\nParses cell formatted with ::: {$something}, and potentially :::\n\nsource\n\n\n\n\n convert_shortcuts (cell)\n\n\nsource\n\n\n\n\n LayoutProc (nb)\n\nA proc that will automatically change #| css format to ::: {format} … :::\nAn example usage of this proc is writing something such as (just the content):\n\n\"\"\"\n#| layout .column-margin\nSome test stuff!\n\"\"\";\n\nIn a markdown cell and then running the processor\nSome test stuff!\nOr you can split it up into multiple cells by dictating start and end:\n\n\"\"\"\n#| layout .column-margin start\nSome test stuff!\n\"\"\";\n\n\n\"\"\"\n#| layout end\n\"\"\";\n\nSome test stuff!"
+  },
+  {
+    "objectID": "tagmaker.html#inspiration",
+    "href": "tagmaker.html#inspiration",
+    "title": "Tag Maker",
+    "section": "",
+    "text": "As I was writing my new course, I found that having to do two sets of ::: and something to put in between two {} annoying, so this is a quick processor to do that for me as a tag\n\nsource\n\n\n\n convert_layout (cell, layout, start=False)\n\nParses cell formatted with ::: {$something}, and potentially :::\n\nsource\n\n\n\n\n convert_shortcuts (cell)\n\n\nsource\n\n\n\n\n LayoutProc (nb)\n\nA proc that will automatically change #| css format to ::: {format} … :::\nAn example usage of this proc is writing something such as (just the content):\n\n\"\"\"\n#| layout .column-margin\nSome test stuff!\n\"\"\";\n\nIn a markdown cell and then running the processor\nSome test stuff!\nOr you can split it up into multiple cells by dictating start and end:\n\n\"\"\"\n#| layout .column-margin start\nSome test stuff!\n\"\"\";\n\n\n\"\"\"\n#| layout end\n\"\"\";\n\nSome test stuff!"
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "nbdev-extensions",
+    "section": "",
+    "text": "These extensions will have niche use cases in some places, however these are ones where I find a benefit in having them at least once. Also known as, cool ideas myself or others have considered with nbdev brought to life"
+  },
+  {
+    "objectID": "index.html#install",
+    "href": "index.html#install",
+    "title": "nbdev-extensions",
+    "section": "Install",
+    "text": "Install\npip install nbdev-extensions"
+  },
+  {
+    "objectID": "index.html#how-to-use",
+    "href": "index.html#how-to-use",
+    "title": "nbdev-extensions",
+    "section": "How to use",
+    "text": "How to use\nTo enable any of these extensions, in your settings.ini make sure to:\n\nAdd nbdev-extensions as a requirement\nAdd procs = nbdev_extensions.codenotes:NoteExportProc, where it should point to the exact function being called"
+  },
+  {
+    "objectID": "index.html#features",
+    "href": "index.html#features",
+    "title": "nbdev-extensions",
+    "section": "Features",
+    "text": "Features\nnbdev-extensions currently has the following features:\n\nnew_nb - A CLI/functional interface to quickly generate blank template notebooks for nbdev development with all of the necessary boilerplate cells prefilled based on the passed parameters.\nCode Notes - A note-taking annotation tool utilizing nbdev to write quick comments and explanations for sections of code in a code cell without cluttering the code cell with comments. These show up as panels in the rendered documentation, one with just the source code and the other with the source and an explanation\nTag Maker - A quick way to annotate ::: {something} ... ::: by writing it as a directive (#| layout something)"
+  },
+  {
+    "objectID": "codetips.html",
+    "href": "codetips.html",
+    "title": "Code Tips",
+    "section": "",
+    "text": "Code Tips operate the same way as Code Notes however they show up as tooltips instead and use the tip tag instead of the explain. Note that it also uses multiline CodeNotes by default so you need a start and an end.\nTo use this make sure that you add in hint.css and tips.css to the _quarto.yml under the css section!\n\nfrom fastcore.test import test_eq\n\n\nsource\n\ndownload_tooltip_css\n\n download_tooltip_css ()\n\n\nsource\n\n\nwrite_tooltip_directives\n\n write_tooltip_directives (explanation:str,\n                           hint_directives:list=['rounded', 'medium',\n                           'right'], filename:str=None)\n\nCreates a tooltip in style of hint_directives with content explanation\n\n\n\n\n\n\n\n\n\n\nType\nDefault\nDetails\n\n\n\n\nexplanation\nstr\n\nThe tooltip text\n\n\nhint_directives\nlist\n[‘rounded’, ‘medium’, ‘right’]\nA list of css directives to modify the tooltip\n\n\nfilename\nstr\nNone\nAn optional filename to be rendered\n\n\n\n\nsource\n\n\nconvert_explanation\n\n convert_explanation (explanation_cell, source)\n\nTakes an explanation and source code and linkes them together in a new cell\n\nsource\n\n\nextract_code\n\n extract_code (start_code, end_code, source, instance_num,\n               end_instance_num=0)\n\nFinds code between start and finish potentially with instances to check\n\nsource\n\n\nparse_code\n\n parse_code (code_cell, markdown_cell)\n\nParses directives to extract the code needed to be highlighted\n\nsource\n\n\nTipExportProc\n\n TipExportProc (nb)\n\nA proc that checks and reorganizes cells for documentation for proper explainations\n\nsource\n\n\nparse_notes\n\n parse_notes ()\n\nExports notebooks to parsed notes for documentation. Should be called in the workflow, not yourself!\n\nprocessor = NBProcessor(\"test.ipynb\", [TipExportProc], rm_directives=False)\nprocessor.process()\n\n\nwrite_nb(processor.nb, \"result.ipynb\")\n\nTo use this, add nbdev-extensions.codetips:TipExportProc to your settings.ini and add the required css files to your _quarto.yml\nNow it will automatically build your docs like notes!\n\n\n\n    return a+b"
+  },
+  {
+    "objectID": "strip.html",
+    "href": "strip.html",
+    "title": "Strip notebooks of all data",
+    "section": "",
+    "text": "source\n\nstrip_nbs\n\n strip_nbs (notebook_path:str, output_folder:str)\n\nRemoves all non-code cells from notebook_path and saves it in output_folder"
+  },
+  {
+    "objectID": "codenotes.html",
+    "href": "codenotes.html",
+    "title": "Code Notes",
+    "section": "",
+    "text": "Code notes operate by annotation notes in an exploratory fashion. It involves a simple two step process:\n\nWrite the code you want to annotate in a code cell:\n\ndef addition(a,b):\n    \"Adds two numbers together\"\n    return a+b\n\nNote: In this example it is a function, but this could be any code whatsoever. Variable definitions, quick oneliners in Jupyter, it does not matter!\n\n\nIn subsequant cells, include an explaination for each line while following the following template:\n\nexplain {{code to highlight}} {{instance number of code occuring}}\n\nThis is my explanation\nFor example, I could have:\nexplain a+b\n\nWe take the sum of a and b, which is written in python with the \"+\" symbol\nOr, if the code you wish to explain is multiple lines, you can select between which code to highlight such as:\nexplain multiline (a,b) 0 return a+b 0\n\nThis function takes the two inputs (a and b) and returns their sum\nThe zeros in these tags (0) are instance numbers for these parts. So if code is repeated in the block group, you can specify which particular subset the note belongs to.\nThese then get rendered together later as notes when calling build_notes from the CLI, and can be viewed on the documentation website.\nThese notes are rendered as a two-block column, with the first showing just the code, and the second showing the code and snippets below it with each explanation.\nSee an example now:\n\n\n\nimage.png\n\n\n\n\n\nimage.png\n\n\n\nsource\n\nmake_panel_tabset\n\n make_panel_tabset ()\n\nCreates a templated panel tabset for Quarto\n\nsource\n\n\nconvert_explanation\n\n convert_explanation (explanation_cell, source)\n\nTakes an explanation and source code and linkes them together in a new cell\n\nsource\n\n\nextract_code\n\n extract_code (start_code, end_code, source, instance_num,\n               end_instance_num=0)\n\nFinds code between start and finish potentially with instances to check\n\nsource\n\n\nparse_code\n\n parse_code (code_cell, markdown_cell)\n\nParses directives to extract the code needed to be highlighted\n\nsource\n\n\nNoteExportProc\n\n NoteExportProc (nb)\n\nA proc that checks and reorganizes cells for documentation for proper explainations\n\nsource\n\n\nparse_notes\n\n parse_notes ()\n\nExports notebooks to parsed notes for documentation. Should be called in the workflow, not yourself!\nTo use this, add nbdev-extensions as a requirement in your settings.ini and add in the procs, such that:\nrequirements=nbdev-extensions\nprocs = \n    nbdev_extensions.codenotes:NoteExportProc\nNow it will automatically build your docs like notes!\n\nCodeCode + Explanation\n\n\n\ndef addition(a,b):\n    \"Adds two numbers together\"\n    return a+b\n\n\n\n\ndef addition(a,b):\n    \"Adds two numbers together\"\n    return a+b\n\n\na+b\n\nWe return the sum of a and b\n\n\nreturn\n\nReturn something"
+  }
+]
