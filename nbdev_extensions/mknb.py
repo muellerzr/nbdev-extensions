@@ -33,7 +33,7 @@ def _mk_nb(title,desc,exp=None):
     if exp is not None: 
         nb.cells.append(mk_cell(exp))
     nb.cells.append(mk_cell(title+desc, "markdown"))
-    nb.cells.append(mk_cell(""))
+    nb.cells.append(mk_cell("", outputs=[], execution_count=0))
     if exp is not None:
         nb.cells.append(mk_cell(_export))
     nb.cells = list(nb.cells)
